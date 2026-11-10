@@ -9,7 +9,7 @@
     "mac_os_x": ">= 0.0.0"
   },
   "dependencies": {
-    "cpe_profiles_local": ">= 0.0.0"
+
   },
   "providing": {
 
