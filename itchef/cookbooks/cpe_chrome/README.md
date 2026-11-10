@@ -30,6 +30,9 @@ For Chrome and Chrome Canary the list of managed polices can be found here:
 https://cloud.google.com/docs/chrome-enterprise/policies
 
 All policy-managed settings are stored in the node['cpe_chrome']['profile'] hash.
+On macOS, the Chrome profile contains both Chrome and Chrome Canary payloads,
+including Canary settings before Canary is installed. `canary_ignored_prefs`
+still excludes settings from the Canary payload only.
 
 To add a managed setting to your profile, simply add the key from the URL list
 above to this hash:

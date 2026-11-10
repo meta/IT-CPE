@@ -1,3 +1,4 @@
+# @lint-ignore FBCHEFCBLICENSE:OssConflict
 # Copyright (c) Facebook, Inc. and its affiliates.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -200,44 +201,24 @@ action_class do
         'PayloadUUID' => '3377ead0-2310-0131-32ec-000c2944c108',
         'PayloadEnabled' => true,
         'PayloadDisplayName' => 'Chrome',
+      }, {
+        'PayloadType' => 'com.google.Chrome.canary',
+        'PayloadVersion' => 1,
+        'PayloadIdentifier' => "#{prefix}.browsers.chromecanary",
+        'PayloadUUID' => '82ed1874-a0a2-4de2-aae1-ff78c7861f12',
+        'PayloadEnabled' => true,
+        'PayloadDisplayName' => 'Chrome Canary',
       }],
     }
     prefs.each do |k, v|
       chrome_profile['PayloadContent'][0][k] = v
+      unless node['cpe_chrome']['canary_ignored_prefs'].include?(k)
+        chrome_profile['PayloadContent'][1][k] = v
+      end
     end
     profile_domain = "#{node['cpe_profiles']['prefix']}.browsers.chrome"
     node.default['cpe_profiles'][profile_domain] = chrome_profile
 
-    # Check for Chrome Canary
-    if node.installed?('com.google.Chrome.canary')
-      prefix = node['cpe_profiles']['prefix']
-      organization = node['organization'] ? node['organization'] : 'Facebook'
-      canary_profile = {
-        'PayloadIdentifier' => "#{prefix}.browsers.chromecanary",
-        'PayloadRemovalDisallowed' => true,
-        'PayloadScope' => 'System',
-        'PayloadType' => 'Configuration',
-        'PayloadUUID' => 'bf900530-2306-0131-32e2-000c2944c108',
-        'PayloadOrganization' => organization,
-        'PayloadVersion' => 1,
-        'PayloadDisplayName' => 'Chrome Canary',
-        'PayloadContent' => [{
-          'PayloadType' => 'com.google.Chrome.canary',
-          'PayloadVersion' => 1,
-          'PayloadIdentifier' => "#{prefix}.browsers.chromecanary",
-          'PayloadUUID' => 'bf900530-2306-0131-32e2-000c2944c108',
-          'PayloadEnabled' => true,
-          'PayloadDisplayName' => 'Chrome Canary',
-        }],
-      }
-      prefs.each do |k, v|
-        unless node['cpe_chrome']['canary_ignored_prefs'].include?(k)
-          canary_profile['PayloadContent'][0][k] = v
-        end
-      end
-      profile_domain = "#{node['cpe_profiles']['prefix']}.browsers.chromecanary"
-      node.default['cpe_profiles'][profile_domain] = canary_profile
-    end
     # Apply the Master Preferences file
     master_path = '/Library/Google/Google Chrome Master Preferences'
     if mprefs.empty?
