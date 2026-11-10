@@ -3,8 +3,8 @@
   "description": "Manages macOS configuration profiles via other cookbooks",
   "long_description": "",
   "maintainer": "Facebook",
-  "maintainer_email": "noreply@facebook.com",
-  "license": "Apache-2.0",
+  "maintainer_email": "oncall+client_os@xmail.facebook.com",
+  "license": "All rights reserved",
   "platforms": {
     "mac_os_x": ">= 0.0.0"
   },

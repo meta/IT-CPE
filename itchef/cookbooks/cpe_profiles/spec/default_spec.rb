@@ -1,3 +1,4 @@
+# (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
 # rubocop:disable Chef/Meta/MetadataExists
 require './spec/itchef_spec'
 require './chef/itchef/spec/itchef_node_helpers'

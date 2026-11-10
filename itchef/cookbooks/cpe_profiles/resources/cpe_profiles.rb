@@ -1,16 +1,4 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
 
 # Cookbook Name:: cpe_profiles
 # Resource:: cpe_profiles
@@ -49,21 +37,32 @@ end
 
 action_class do
   def profiles
+    prefix = node['cpe_profiles']['prefix']
+    allowed_profiles = [
+      "#{prefix}.browsers.chrome",
+      "#{prefix}.mde",
+    ]
     node['cpe_profiles'].to_h.reject do |k, v|
-      # Chef::DelayedEvaluator's need accessed with node
-      # if we want the real object type to be returned
-      v = node['cpe_profiles'][k] if v.is_a?(Chef::DelayedEvaluator)
-
-      [
+      next true if [
         'prefix',
         'default_cookbook',
         'cookbook_map',
-      ].include?(k) ||
-        # Rejects any profile that isnt
-        #  a Hash or a Chef::DelayedEvaluator
-        #  or is empty
-        !v.is_a?(Hash) ||
-        (v.is_a?(Hash) && v.empty?)
+      ].include?(k)
+
+      # Chef::DelayedEvaluator's need accessed with node
+      # if we want the real object type to be returned
+      v = node['cpe_profiles'][k] if v.is_a?(Chef::DelayedEvaluator)
+      next true unless v.is_a?(Hash) && !v.empty?
+      next false if allowed_profiles.include?(k) && v['PayloadIdentifier'] == k
+
+      Chef::Log.warn(
+        "#{cookbook_name}: Rejecting legacy profile #{k.inspect}. " +
+          'cpe_profiles only supports the existing Chrome browser profile ' +
+          'and MDE migration fallback. Store new profiles in Configerator ' +
+          'and install them with cpe_cfgr_profiles. The profile key must ' +
+          'also match its PayloadIdentifier.',
+      )
+      true
     end
   end
 
