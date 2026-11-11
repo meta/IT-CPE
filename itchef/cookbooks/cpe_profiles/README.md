@@ -31,9 +31,10 @@ accepted Chrome and MDE profiles are delivered with `.browsers.chrome` and
 `.mde` suffixes respectively. The resource must run before the destination
 installer.
 
-The CPE MDM Canary marker is written directly to `cpe_profiles_interngraph` by
-`cpe_base_settings::profiles`; it does not pass through this allowlist.
-Direct writes to destination cookbooks are outside this resource's guard.
+The retired CPE MDM Canary marker is no longer installed by
+`cpe_base_settings::profiles` and is removed through normal
+`cpe_profiles_interngraph` reconciliation. Direct writes to destination
+cookbooks are outside this resource's guard.
 
 Attributes
 ----------
