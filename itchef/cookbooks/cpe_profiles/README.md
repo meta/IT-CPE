@@ -10,8 +10,6 @@ Configerator and select them from Chef through `cpe_cfgr_profiles` instead.
 This resource accepts only the existing profiles keyed by:
 * `#{node['cpe_profiles']['prefix']}.browsers.chrome` — the combined Chrome and
   Chrome Canary browser policy profile.
-* `#{node['cpe_profiles']['prefix']}.mde` — the MDE migration/rollback fallback,
-  retained until its static replacement profiles are installed.
 
 The key must exactly match the profile's `PayloadIdentifier`. Other nonempty
 profile hashes are rejected with a Chef warning explaining the supported path.
@@ -27,9 +25,8 @@ cookbook's prefix.
 
 The default source prefix is `com.facebook.prefix-rewritten.chef`. The
 `cpe_profiles_interngraph` destination prefix is `com.facebook.mdm.chef`, so the
-accepted Chrome and MDE profiles are delivered with `.browsers.chrome` and
-`.mde` suffixes respectively. The resource must run before the destination
-installer.
+accepted Chrome profile is delivered with the `.browsers.chrome` suffix.
+The resource must run before the destination installer.
 
 The retired CPE MDM Canary marker is no longer installed by
 `cpe_base_settings::profiles` and is removed through normal

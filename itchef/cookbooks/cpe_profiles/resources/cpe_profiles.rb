@@ -40,7 +40,6 @@ action_class do
     prefix = node['cpe_profiles']['prefix']
     allowed_profiles = [
       "#{prefix}.browsers.chrome",
-      "#{prefix}.mde",
     ]
     node['cpe_profiles'].to_h.reject do |k, v|
       next true if [
@@ -57,8 +56,8 @@ action_class do
 
       Chef::Log.warn(
         "#{cookbook_name}: Rejecting legacy profile #{k.inspect}. " +
-          'cpe_profiles only supports the existing Chrome browser profile ' +
-          'and MDE migration fallback. Store new profiles in Configerator ' +
+          'cpe_profiles only supports the existing Chrome browser profile. ' +
+          'Store new profiles in Configerator ' +
           'and install them with cpe_cfgr_profiles. The profile key must ' +
           'also match its PayloadIdentifier.',
       )
