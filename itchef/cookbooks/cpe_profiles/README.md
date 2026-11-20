@@ -25,8 +25,11 @@ cookbook's prefix.
 
 The default source prefix is `com.facebook.prefix-rewritten.chef`. The
 `cpe_profiles_interngraph` destination prefix is `com.facebook.mdm.chef`, so the
-accepted Chrome profile is delivered with the `.browsers.chrome` suffix.
-The resource must run before the destination installer.
+accepted Chrome profile remains desired with the `.browsers.chrome` suffix.
+The destination install method is disabled: the existing installed Chrome
+profile is retained, not updated or reinstalled. Keep its allowlist entry until
+Chrome producer retirement removes that profile on its own schedule.
+The resource must run before destination reconciliation.
 
 The retired CPE MDM Canary marker is no longer installed by
 `cpe_base_settings::profiles` and is removed through normal
