@@ -77,7 +77,12 @@ action :install do
   installed_version = current_resource.version
 
   unless new_resource.allow_downgrade
-    if Gem::Version.new(installed_version) > Gem::Version.new(desired_version)
+    # If the package isn't installed (or the receipt doesn't resolve) there is
+    # no installed version to compare against, and `Gem::Version.new(nil)`
+    # raises ArgumentError. Treat that as "nothing installed" and proceed.
+    if !installed_version.nil? &&
+       !desired_version.nil? &&
+       Gem::Version.new(installed_version) > Gem::Version.new(desired_version)
       log_info(
         "Installed version (#{installed_version}) is higher than desired " +
         "version (#{desired_version}), but allow_downgrade is false.",
